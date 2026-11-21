@@ -1,1 +1,1697 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <meta name="theme-color" content="#0f766e" />
+  <meta name="apple-mobile-web-app-capable" content="yes" />
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+  <meta name="apple-mobile-web-app-title" content="خصم كود" />
+  <title>خصم كود | نظام قسائم الخصم الذكي</title>
+  <link rel="manifest" href="./manifest.json" />
+  <link rel="icon" type="image/svg+xml" href="./icon.svg" />
+  <link rel="apple-touch-icon" href="./icon.svg" />
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Cairo:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+  <script src="https://unpkg.com/html5-qrcode@2.3.8/html5-qrcode.min.js" defer></script>
+  <style>
+    :root {
+      --primary: #0f766e;
+      --primary-hover: #115e59;
+      --primary-light: #f0fdfa;
+      --primary-border: #99f6e4;
+      --bg: #f8fafc;
+      --surface: #ffffff;
+      --text: #0f172a;
+      --text-muted: #64748b;
+      --border: #e2e8f0;
+      --success: #059669;
+      --success-bg: #ecfdf5;
+      --danger: #dc2626;
+      --danger-bg: #fef2f2;
+      --warning: #d97706;
+      --warning-bg: #fffbeb;
+      --radius: 16px;
+      --shadow: 0 4px 20px -2px rgba(15, 23, 42, 0.06);
+    }
 
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: 'Cairo', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+      -webkit-tap-highlight-color: transparent;
+    }
+
+    body {
+      background-color: var(--bg);
+      color: var(--text);
+      min-height: 100vh;
+      padding-bottom: 88px;
+      line-height: 1.5;
+    }
+
+    .app-header {
+      background: linear-gradient(135deg, #0f766e 0%, #115e59 100%);
+      color: #fff;
+      padding: 16px 20px 20px;
+      border-bottom-left-radius: 24px;
+      border-bottom-right-radius: 24px;
+      box-shadow: 0 8px 24px -6px rgba(15, 118, 110, 0.35);
+      position: sticky;
+      top: 0;
+      z-index: 40;
+    }
+
+    .header-top {
+      max-width: 960px;
+      margin: 0 auto;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 10px;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+
+    .brand-logo {
+      width: 40px;
+      height: 40px;
+      background: rgba(255,255,255,0.16);
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 800;
+      font-size: 20px;
+      color: #5eead4;
+      border: 1px solid rgba(255,255,255,0.2);
+    }
+
+    .brand h1 {
+      font-size: 18px;
+      font-weight: 800;
+      line-height: 1.2;
+    }
+
+    .brand span {
+      font-size: 11px;
+      color: #ccfbf1;
+      display: block;
+    }
+
+    .header-actions {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .pill-btn {
+      background: rgba(255,255,255,0.15);
+      color: #fff;
+      border: 1px solid rgba(255,255,255,0.22);
+      padding: 6px 12px;
+      border-radius: 999px;
+      font-size: 12px;
+      font-weight: 600;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      transition: 0.2s;
+    }
+
+    .pill-btn:hover { background: rgba(255,255,255,0.25); }
+    .pill-btn.active-lock { background: #fef3c7; color: #92400e; border-color: #fde68a; }
+
+    .sync-dot {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: #fbbf24;
+      display: inline-block;
+    }
+    .sync-dot.online { background: #4ade80; box-shadow: 0 0 8px #4ade80; }
+
+    .container {
+      max-width: 960px;
+      margin: 0 auto;
+      padding: 18px 16px;
+    }
+
+    .card {
+      background: var(--surface);
+      border-radius: var(--radius);
+      padding: 20px;
+      box-shadow: var(--shadow);
+      border: 1px solid var(--border);
+      margin-bottom: 16px;
+    }
+
+    .card-title {
+      font-size: 16px;
+      font-weight: 700;
+      color: var(--text);
+      margin-bottom: 4px;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .card-sub {
+      font-size: 13px;
+      color: var(--text-muted);
+      margin-bottom: 16px;
+    }
+
+    .form-group { margin-bottom: 14px; }
+    .form-label {
+      display: block;
+      font-size: 13px;
+      font-weight: 700;
+      margin-bottom: 6px;
+      color: var(--text);
+    }
+
+    .form-control {
+      width: 100%;
+      padding: 11px 14px;
+      border: 1.5px solid var(--border);
+      border-radius: 12px;
+      font-size: 14px;
+      color: var(--text);
+      background: #fff;
+      transition: border-color 0.2s, box-shadow 0.2s;
+      outline: none;
+    }
+
+    .form-control:focus {
+      border-color: var(--primary);
+      box-shadow: 0 0 0 3px rgba(15, 118, 110, 0.12);
+    }
+
+    .grid-2 {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+    }
+
+    @media (max-width: 600px) {
+      .grid-2 { grid-template-columns: 1fr; }
+    }
+
+    .chips-row {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+      margin-bottom: 10px;
+    }
+
+    .chip {
+      padding: 7px 14px;
+      border-radius: 10px;
+      border: 1.5px solid var(--border);
+      background: #fff;
+      color: var(--text);
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      transition: all 0.15s;
+    }
+
+    .chip:hover { border-color: var(--primary); }
+    .chip.selected {
+      background: var(--primary);
+      color: #fff;
+      border-color: var(--primary);
+    }
+
+    .btn {
+      width: 100%;
+      padding: 13px 18px;
+      border: none;
+      border-radius: 12px;
+      font-size: 15px;
+      font-weight: 700;
+      cursor: pointer;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      transition: 0.2s;
+    }
+
+    .btn-primary {
+      background: var(--primary);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(15, 118, 110, 0.25);
+    }
+    .btn-primary:hover { background: var(--primary-hover); }
+
+    .btn-outline {
+      background: #fff;
+      color: var(--primary);
+      border: 1.5px solid var(--primary);
+    }
+    .btn-outline:hover { background: var(--primary-light); }
+
+    .btn-success {
+      background: var(--success);
+      color: #fff;
+      box-shadow: 0 4px 12px rgba(5, 150, 105, 0.25);
+    }
+
+    .btn-whatsapp {
+      background: #16a34a;
+      color: #fff;
+    }
+
+    .btn-danger {
+      background: var(--danger);
+      color: #fff;
+    }
+
+    .btn-sm {
+      padding: 8px 12px;
+      font-size: 13px;
+      width: auto;
+    }
+
+    .bottom-nav {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      background: rgba(255, 255, 255, 0.96);
+      backdrop-filter: blur(10px);
+      border-top: 1px solid var(--border);
+      display: flex;
+      justify-content: space-around;
+      padding: 8px 6px calc(8px + env(safe-area-inset-bottom));
+      z-index: 50;
+      box-shadow: 0 -4px 20px rgba(15, 23, 42, 0.05);
+    }
+
+    .nav-item {
+      flex: 1;
+      max-width: 140px;
+      background: none;
+      border: none;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 3px;
+      color: var(--text-muted);
+      font-size: 11px;
+      font-weight: 700;
+      cursor: pointer;
+      padding: 4px;
+      border-radius: 10px;
+      transition: 0.15s;
+    }
+
+    .nav-item svg { width: 22px; height: 22px; }
+    .nav-item.active {
+      color: var(--primary);
+      background: var(--primary-light);
+    }
+
+    .tab-panel { display: none; animation: fadeIn 0.2s ease; }
+    .tab-panel.active { display: block; }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(4px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 10px;
+      margin-bottom: 16px;
+    }
+
+    .stat-box {
+      background: var(--surface);
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      padding: 12px;
+      text-align: center;
+      box-shadow: var(--shadow);
+    }
+
+    .stat-num {
+      font-size: 22px;
+      font-weight: 800;
+      color: var(--primary);
+      line-height: 1.2;
+    }
+
+    .stat-label {
+      font-size: 11px;
+      color: var(--text-muted);
+      font-weight: 600;
+    }
+
+    .scanner-wrapper {
+      background: #0f172a;
+      border-radius: 14px;
+      overflow: hidden;
+      margin-bottom: 14px;
+      position: relative;
+      display: none;
+    }
+    .scanner-wrapper.open { display: block; }
+    .scanner-wrapper video { width: 100% !important; border-radius: 14px; }
+
+    .verify-box {
+      border-radius: 16px;
+      padding: 20px;
+      margin-top: 14px;
+      border: 2px solid;
+      animation: fadeIn 0.25s ease;
+    }
+    .verify-box.valid {
+      background: var(--success-bg);
+      border-color: #34d399;
+    }
+    .verify-box.used {
+      background: var(--danger-bg);
+      border-color: #f87171;
+    }
+    .verify-box.printed {
+      background: var(--warning-bg);
+      border-color: #fbbf24;
+    }
+
+    .discount-hero {
+      font-size: 36px;
+      font-weight: 800;
+      color: var(--primary);
+      text-align: center;
+      margin: 8px 0;
+    }
+
+    .coupon-row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+      margin-bottom: 10px;
+      background: #fff;
+      gap: 10px;
+    }
+
+    .badge {
+      padding: 4px 10px;
+      border-radius: 999px;
+      font-size: 11px;
+      font-weight: 700;
+      white-space: nowrap;
+    }
+    .badge-printed { background: #f1f5f9; color: #475569; }
+    .badge-active { background: #dcfce7; color: #166534; }
+    .badge-used { background: #fee2e2; color: #991b1b; }
+
+    .a4-preview-container {
+      overflow-x: auto;
+      padding: 8px 0;
+    }
+
+    .a4-sheet {
+      width: 210mm;
+      min-height: 297mm;
+      background: #ffffff;
+      margin: 0 auto;
+      padding: 8mm;
+      border: 1px solid #cbd5e1;
+      box-shadow: 0 10px 30px rgba(0,0,0,0.08);
+      display: grid;
+      gap: 4mm;
+      align-content: start;
+    }
+
+    .qr-ticket {
+      border: 1.5px dashed #94a3b8;
+      border-radius: 10px;
+      padding: 6px;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      text-align: center;
+      background: #fff;
+      break-inside: avoid;
+      page-break-inside: avoid;
+    }
+
+    .qr-ticket svg {
+      width: 100%;
+      max-width: 82px;
+      height: auto;
+      display: block;
+    }
+
+    .qr-code-text {
+      font-family: monospace;
+      font-size: 10px;
+      font-weight: 700;
+      color: #0f172a;
+      margin-top: 4px;
+      letter-spacing: 0.5px;
+    }
+
+    .qr-brand-tag {
+      font-size: 9px;
+      font-weight: 700;
+      color: #0f766e;
+      margin-bottom: 2px;
+    }
+
+    .qr-hint {
+      font-size: 8px;
+      color: #64748b;
+      margin-top: 1px;
+    }
+
+    .modal-backdrop {
+      position: fixed;
+      inset: 0;
+      background: rgba(15, 23, 42, 0.55);
+      display: none;
+      align-items: center;
+      justify-content: center;
+      padding: 16px;
+      z-index: 100;
+    }
+    .modal-backdrop.open { display: flex; }
+    .modal-card {
+      background: #fff;
+      border-radius: 20px;
+      max-width: 460px;
+      width: 100%;
+      padding: 22px;
+      box-shadow: 0 20px 40px rgba(0,0,0,0.2);
+    }
+
+    .toast {
+      position: fixed;
+      top: 78px;
+      left: 50%;
+      transform: translateX(-50%) translateY(-20px);
+      background: #0f172a;
+      color: #fff;
+      padding: 10px 18px;
+      border-radius: 999px;
+      font-size: 13px;
+      font-weight: 700;
+      opacity: 0;
+      pointer-events: none;
+      transition: 0.25s;
+      z-index: 120;
+      box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+      white-space: nowrap;
+    }
+    .toast.show {
+      opacity: 1;
+      transform: translateX(-50%) translateY(0);
+    }
+
+    @media print {
+      @page {
+        size: A4 portrait;
+        margin: 6mm;
+      }
+      body {
+        background: #fff !important;
+        padding: 0 !important;
+        margin: 0 !important;
+      }
+      .app-header, .bottom-nav, .no-print, .card:not(.print-wrapper) {
+        display: none !important;
+      }
+      .container, .print-wrapper, .a4-preview-container {
+        padding: 0 !important;
+        margin: 0 !important;
+        max-width: 100% !important;
+        box-shadow: none !important;
+        border: none !important;
+        overflow: visible !important;
+      }
+      .a4-sheet {
+        width: 100% !important;
+        min-height: auto !important;
+        padding: 0 !important;
+        margin: 0 !important;
+        border: none !important;
+        box-shadow: none !important;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <header class="app-header no-print">
+    <div class="header-top">
+      <div class="brand">
+        <div class="brand-logo">%</div>
+        <div>
+          <h1>خصم كود</h1>
+          <span>نظام القسائم والخصومات الذكي</span>
+        </div>
+      </div>
+      <div class="header-actions">
+        <button id="installBtn" class="pill-btn" style="display:none;" onclick="installPWA()">
+          <span>📲 تثبيت</span>
+        </button>
+        <button id="kioskBtn" class="pill-btn" onclick="toggleKioskMode()" title="وضع قفل العيادة">
+          <span id="kioskIcon">🔓</span>
+          <span id="kioskText">وضع الإدارة</span>
+        </button>
+        <button class="pill-btn" onclick="openSyncModal()">
+          <span id="syncDot" class="sync-dot"></span>
+          <span id="syncLabel">محلي</span>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <div id="toast" class="toast"></div>
+
+  <main class="container">
+    <div class="stats-grid no-print">
+      <div class="stat-box">
+        <div class="stat-num" id="statPrinted">0</div>
+        <div class="stat-label">مطبوع بانتظار التفعيل</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color:#059669;" id="statActive">0</div>
+        <div class="stat-label">مفعّل للعملاء</div>
+      </div>
+      <div class="stat-box">
+        <div class="stat-num" style="color:#dc2626;" id="statUsed">0</div>
+        <div class="stat-label">مستخدم (منتهي)</div>
+      </div>
+    </div>
+
+    <section id="tab-print" class="tab-panel active">
+      <div class="card no-print">
+        <div class="card-title">🖨️ توليد وطباعة باركودات على ورقة A4</div>
+        <div class="card-sub">اختر عدد القسائم في الورقة الواحدة ثم اطبعها مباشرة أو احفظها كملف PDF</div>
+
+        <div class="form-group">
+          <label class="form-label">عدد الباركودات في ورقة A4:</label>
+          <div class="chips-row" id="countChips">
+            <button type="button" class="chip selected" onclick="selectCount(16, this)">16 باركود (4×4)</button>
+            <button type="button" class="chip" onclick="selectCount(20, this)">20 باركود (4×5)</button>
+            <button type="button" class="chip" onclick="selectCount(24, this)">24 باركود (4×6)</button>
+            <button type="button" class="chip" onclick="selectCount(30, this)">30 باركود (5×6)</button>
+          </div>
+          <div class="grid-2">
+            <div>
+              <input type="number" id="customCount" class="form-control" value="16" min="1" max="80" placeholder="أو اكتب عدداً مخصصاً..." onchange="updateCustomCount()" />
+            </div>
+            <div>
+              <input type="text" id="batchPrefix" class="form-control" value="KC" maxlength="5" placeholder="بادئة الكود (مثلاً KC)" />
+            </div>
+          </div>
+        </div>
+
+        <div style="display:flex; gap:10px; flex-wrap:wrap;">
+          <button type="button" class="btn btn-primary" style="flex:2;" onclick="generateNewBatch()">
+            ✨ توليد ورقة A4 جديدة
+          </button>
+          <button type="button" class="btn btn-outline" style="flex:1;" onclick="window.print()">
+            🖨️ طباعة A4 / PDF
+          </button>
+        </div>
+      </div>
+
+      <div class="card print-wrapper" id="sheetCard" style="display:none;">
+        <div class="no-print" style="display:flex; justify-content:space-between; align-items:center; margin-bottom:12px; flex-wrap:wrap; gap:8px;">
+          <div>
+            <strong id="sheetTitle" style="font-size:15px;">ورقة قسائم جاهزة للطباعة</strong>
+            <span id="sheetMeta" style="font-size:12px; color:var(--text-muted); display:block;"></span>
+          </div>
+          <button type="button" class="btn btn-primary btn-sm" onclick="window.print()">🖨️ اطبع الورقة الآن</button>
+        </div>
+        <div class="a4-preview-container">
+          <div id="a4Sheet" class="a4-sheet"></div>
+        </div>
+      </div>
+
+      <div class="card no-print" id="batchesCard" style="display:none;">
+        <div class="card-title">🗂️ سجل الأوراق المطبوعة سابقاً</div>
+        <div class="card-sub">يمكنك إعادة عرض وطباعة أي دفعة سابقة في أي وقت</div>
+        <div id="batchesList"></div>
+      </div>
+    </section>
+
+    <section id="tab-activate" class="tab-panel">
+      <div class="card">
+        <div class="card-title">🎟️ تفعيل باركود وإسناده لعميل</div>
+        <div class="card-sub">امسح الباركود المطبوع بالكاميرا أو اختره من القائمة، ثم أدخل بيانات العميل والخصم</div>
+
+        <div style="display:flex; gap:8px; margin-bottom:12px;">
+          <button type="button" class="btn btn-outline btn-sm" style="flex:1;" onclick="toggleScanner('activate')">
+            📷 مسح الباركود بالكاميرا
+          </button>
+          <select id="unassignedSelect" class="form-control" style="flex:1.4;" onchange="pickUnassignedCode(this.value)">
+            <option value="">-- أو اختر كود مطبوع غير مفعّل --</option>
+          </select>
+        </div>
+
+        <div id="scanner-activate" class="scanner-wrapper">
+          <div id="reader-activate"></div>
+          <button type="button" class="btn btn-danger btn-sm" style="width:100%; border-radius:0;" onclick="stopScanner()">إغلاق الكاميرا</button>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">رقم / رمز الباركود *</label>
+          <input type="text" id="actCode" class="form-control" placeholder="مثال: KC-8492-A7X" style="font-family:monospace; font-weight:700; text-transform:uppercase;" />
+        </div>
+
+        <div class="grid-2">
+          <div class="form-group">
+            <label class="form-label">اسم العميل الكامل *</label>
+            <input type="text" id="actCustomer" class="form-control" placeholder="مثال: علي محمد حسين" />
+          </div>
+          <div class="form-group">
+            <label class="form-label">رقم هاتف العميل (اختياري للواتساب)</label>
+            <input type="tel" id="actPhone" class="form-control" placeholder="مثال: 07701234567" />
+          </div>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">اسم العيادة أو السنتر *</label>
+          <div id="savedClinicsChips" class="chips-row"></div>
+          <input type="text" id="actClinic" class="form-control" placeholder="مثال: عيادة الدكتور أحمد / سنتر النور" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">نسبة أو قيمة الخصم *</label>
+          <div class="chips-row" id="discountChips">
+            <button type="button" class="chip" onclick="selectDiscount('20%', this)">20%</button>
+            <button type="button" class="chip" onclick="selectDiscount('30%', this)">30%</button>
+            <button type="button" class="chip selected" onclick="selectDiscount('50%', this)">50%</button>
+            <button type="button" class="chip" onclick="selectDiscount('70%', this)">70%</button>
+            <button type="button" class="chip" onclick="selectDiscount('كشف مجاني', this)">كشف مجاني</button>
+          </div>
+          <input type="text" id="actDiscount" class="form-control" value="50%" placeholder="أو اكتب الخصم يدوياً (مثلاً 70% أو 25,000 د.ع)" />
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">ملاحظات إضافية (اختياري)</label>
+          <input type="text" id="actNotes" class="form-control" placeholder="مثال: يشمل الفحص والاستشارة فقط" />
+        </div>
+
+        <button type="button" class="btn btn-primary" onclick="activateCoupon()">
+          ✅ حفظ وتفعيل الخصم للعميل
+        </button>
+
+        <div id="activationSuccessBox" style="display:none; margin-top:16px; padding:16px; background:var(--primary-light); border:1.5px solid var(--primary-border); border-radius:14px;">
+          <div style="font-weight:800; color:var(--primary); margin-bottom:6px;">🎉 تم تفعيل القسيمة بنجاح!</div>
+          <div id="activationSummary" style="font-size:13px; margin-bottom:12px;"></div>
+          <div style="display:flex; gap:8px; flex-wrap:wrap;">
+            <button type="button" class="btn btn-whatsapp btn-sm" style="flex:1;" onclick="shareViaWhatsApp()">
+              📲 إرسال عبر واتساب
+            </button>
+            <button type="button" class="btn btn-outline btn-sm" style="flex:1;" onclick="copyActivatedCode()">
+              📋 نسخ الكود
+            </button>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="tab-verify" class="tab-panel">
+      <div class="card">
+        <div class="card-title">🏥 فحص واعتماد الخصم (واجهة العيادة / السنتر)</div>
+        <div class="card-sub">امسح باركود العميل للتحقق من صلاحيته واعتماده لمرة واحدة فقط</div>
+
+        <button type="button" class="btn btn-primary" style="margin-bottom:12px;" onclick="toggleScanner('verify')">
+          📷 فتح الكاميرا لمسح باركود العميل
+        </button>
+
+        <div id="scanner-verify" class="scanner-wrapper">
+          <div id="reader-verify"></div>
+          <button type="button" class="btn btn-danger btn-sm" style="width:100%; border-radius:0;" onclick="stopScanner()">إغلاق الكاميرا</button>
+        </div>
+
+        <div class="form-group">
+          <label class="form-label">أو أدخل رمز الباركود يدوياً:</label>
+          <div style="display:flex; gap:8px;">
+            <input type="text" id="verifyInput" class="form-control" placeholder="اكتب الكود هنا..." style="font-family:monospace; font-weight:700; text-transform:uppercase;" onkeyup="if(event.key==='Enter') checkCouponCode()" />
+            <button type="button" class="btn btn-outline btn-sm" onclick="checkCouponCode()">فحص</button>
+          </div>
+        </div>
+
+        <div id="verifyResult"></div>
+      </div>
+    </section>
+
+    <section id="tab-history" class="tab-panel">
+      <div class="card">
+        <div style="display:flex; justify-content:space-between; align-items:center; flex-wrap:wrap; gap:8px; margin-bottom:12px;">
+          <div>
+            <div class="card-title">📊 سجل القسائم والتقارير</div>
+            <div class="card-sub" style="margin-bottom:0;">متابعة جميع الأكواد المطبوعة والمفعّلة والمستخدمة</div>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" onclick="exportCSV()">📥 تصدير Excel</button>
+        </div>
+
+        <div class="grid-2" style="margin-bottom:12px;">
+          <input type="text" id="searchInput" class="form-control" placeholder="🔍 بحث باسم العميل، العيادة، أو الكود..." oninput="renderHistory()" />
+          <select id="filterStatus" class="form-control" onchange="renderHistory()">
+            <option value="ALL">جميع الحالات</option>
+            <option value="ACTIVE">مفعّل (بانتظار الاستخدام)</option>
+            <option value="USED">مستخدم (تم الخصم)</option>
+            <option value="PRINTED">مطبوع فقط (غير مفعّل)</option>
+          </select>
+        </div>
+
+        <div id="historyList"></div>
+      </div>
+    </section>
+  </main>
+
+  <nav class="bottom-nav no-print" id="bottomNav">
+    <button class="nav-item active" data-tab="tab-print" onclick="switchTab('tab-print')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><polyline points="6 9 6 2 18 2 18 9"/><path d="M6 18H4a2 2 0 0 1-2-2v-5a2 2 0 0 1 2-2h16a2 2 0 0 1 2 2v5a2 2 0 0 1-2 2h-2"/><rect x="6" y="14" width="12" height="8"/></svg>
+      <span>طباعة A4</span>
+    </button>
+    <button class="nav-item" data-tab="tab-activate" onclick="switchTab('tab-activate')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M20.59 13.41l-7.17 7.17a2 2 0 0 1-2.83 0L2 12V2h10l8.59 8.59a2 2 0 0 1 0 2.82z"/><line x1="7" y1="7" x2="7.01" y2="7"/></svg>
+      <span>تفعيل كود</span>
+    </button>
+    <button class="nav-item" data-tab="tab-verify" onclick="switchTab('tab-verify')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+      <span>فحص العيادة</span>
+    </button>
+    <button class="nav-item" data-tab="tab-history" onclick="switchTab('tab-history')">
+      <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="8" y1="6" x2="21" y2="6"/><line x1="8" y1="12" x2="21" y2="12"/><line x1="8" y1="18" x2="21" y2="18"/><line x1="3" y1="6" x2="3.01" y2="6"/><line x1="3" y1="12" x2="3.01" y2="12"/><line x1="3" y1="18" x2="3.01" y2="18"/></svg>
+      <span>السجل</span>
+    </button>
+  </nav>
+
+  <div id="syncModal" class="modal-backdrop" onclick="if(event.target===this) closeSyncModal()">
+    <div class="modal-card">
+      <div class="card-title">☁️ المزامنة السحابية بين الأجهزة</div>
+      <div class="card-sub">لربط هاتفك مع هاتف العيادة أو السنتر لحظياً، ألصق رابط <strong>Firebase Realtime Database</strong> المجاني هنا:</div>
+      <div class="form-group">
+        <label class="form-label">رابط قاعدة بيانات Firebase (URL):</label>
+        <input type="url" id="firebaseUrlInput" class="form-control" dir="ltr" placeholder="https://your-project-default-rtdb.firebaseio.com" />
+      </div>
+      <div class="form-group">
+        <label class="form-label">الرمز السري لقفل العيادة (PIN):</label>
+        <input type="text" id="kioskPinInput" class="form-control" maxlength="6" placeholder="1234" />
+      </div>
+      <div style="display:flex; gap:8px; margin-bottom:10px;">
+        <button type="button" class="btn btn-primary btn-sm" style="flex:1;" onclick="saveSyncSettings()">💾 حفظ ومزامنة</button>
+        <button type="button" class="btn btn-outline btn-sm" onclick="manualSyncNow()">🔄 تحديث الآن</button>
+      </div>
+      <div style="border-top:1px solid var(--border); padding-top:10px; display:flex; justify-content:space-between; gap:8px;">
+        <button type="button" class="btn btn-outline btn-sm" onclick="exportBackupJSON()">نسخ احتياطي JSON</button>
+        <button type="button" class="btn btn-outline btn-sm" onclick="closeSyncModal()">إغلاق</button>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    const QR = (function() {
+      function QR8bitByte(data) {
+        this.mode = 4;
+        this.data = data;
+        this.parsedData = [];
+        for (let i = 0; i < this.data.length; i++) {
+          let code = this.data.charCodeAt(i);
+          if (code > 0x10000) {
+            this.parsedData.push(0xF0 | ((code & 0x1C0000) >>> 18));
+            this.parsedData.push(0x80 | ((code & 0x3F000) >>> 12));
+            this.parsedData.push(0x80 | ((code & 0xFC0) >>> 6));
+            this.parsedData.push(0x80 | (code & 0x3F));
+          } else if (code > 0x800) {
+            this.parsedData.push(0xE0 | ((code & 0xF000) >>> 12));
+            this.parsedData.push(0x80 | ((code & 0xFC0) >>> 6));
+            this.parsedData.push(0x80 | (code & 0x3F));
+          } else if (code > 0x80) {
+            this.parsedData.push(0xC0 | ((code & 0x7C0) >>> 6));
+            this.parsedData.push(0x80 | (code & 0x3F));
+          } else {
+            this.parsedData.push(code);
+          }
+        }
+      }
+      QR8bitByte.prototype.getLength = function() { return this.parsedData.length; };
+      QR8bitByte.prototype.write = function(buffer) {
+        for (let i = 0; i < this.parsedData.length; i++) buffer.put(this.parsedData[i], 8);
+      };
+
+      const QRMath = {
+        glog: function(n) { if (n < 1) throw new Error("glog"); return QRMath.LOG_TABLE[n]; },
+        gexp: function(n) { while (n < 0) n += 255; while (n >= 256) n -= 255; return QRMath.EXP_TABLE[n]; },
+        EXP_TABLE: new Array(256),
+        LOG_TABLE: new Array(256)
+      };
+      for (let i = 0; i < 8; i++) QRMath.EXP_TABLE[i] = 1 << i;
+      for (let i = 8; i < 256; i++) QRMath.EXP_TABLE[i] = QRMath.EXP_TABLE[i - 4] ^ QRMath.EXP_TABLE[i - 5] ^ QRMath.EXP_TABLE[i - 6] ^ QRMath.EXP_TABLE[i - 8];
+      for (let i = 0; i < 255; i++) QRMath.LOG_TABLE[QRMath.EXP_TABLE[i]] = i;
+
+      function QRPolynomial(num, shift) {
+        let offset = 0;
+        while (offset < num.length && num[offset] === 0) offset++;
+        this.num = new Array(num.length - offset + shift);
+        for (let i = 0; i < num.length - offset; i++) this.num[i] = num[i + offset];
+      }
+      QRPolynomial.prototype.get = function(index) { return this.num[index]; };
+      QRPolynomial.prototype.getLength = function() { return this.num.length; };
+      QRPolynomial.prototype.multiply = function(e) {
+        let num = new Array(this.getLength() + e.getLength() - 1);
+        for (let i = 0; i < this.getLength(); i++)
+          for (let j = 0; j < e.getLength(); j++)
+            num[i + j] ^= QRMath.gexp(QRMath.glog(this.get(i)) + QRMath.glog(e.get(j)));
+        return new QRPolynomial(num, 0);
+      };
+      QRPolynomial.prototype.mod = function(e) {
+        if (this.getLength() - e.getLength() < 0) return this;
+        let ratio = QRMath.glog(this.get(0)) - QRMath.glog(e.get(0));
+        let num = new Array(this.getLength());
+        for (let i = 0; i < this.getLength(); i++) num[i] = this.get(i);
+        for (let i = 0; i < e.getLength(); i++) num[i] ^= QRMath.gexp(QRMath.glog(e.get(i)) + ratio);
+        return new QRPolynomial(num, 0).mod(e);
+      };
+
+      const RS_BLOCK_TABLE = [
+        [1, 26, 16],
+        [1, 44, 28],
+        [1, 70, 44],
+        [2, 50, 32]
+      ];
+
+      function QRBitBuffer() { this.buffer = []; this.length = 0; }
+      QRBitBuffer.prototype.get = function(index) {
+        let bufIndex = Math.floor(index / 8);
+        return ((this.buffer[bufIndex] >>> (7 - index % 8)) & 1) === 1;
+      };
+      QRBitBuffer.prototype.put = function(num, length) {
+        for (let i = 0; i < length; i++) this.putBit(((num >>> (length - i - 1)) & 1) === 1);
+      };
+      QRBitBuffer.prototype.putBit = function(bit) {
+        let bufIndex = Math.floor(this.length / 8);
+        if (this.buffer.length <= bufIndex) this.buffer.push(0);
+        if (bit) this.buffer[bufIndex] |= (0x80 >>> (this.length % 8));
+        this.length++;
+      };
+
+      function getErrorCorrectPolynomial(errorCorrectLength) {
+        let a = new QRPolynomial([1], 0);
+        for (let i = 0; i < errorCorrectLength; i++) a = a.multiply(new QRPolynomial([1, QRMath.gexp(i)], 0));
+        return a;
+      }
+
+      function getBCHTypeInfo(data) {
+        let d = data << 10;
+        while (getBCHDigit(d) - getBCHDigit(0x537) >= 0) d ^= (0x537 << (getBCHDigit(d) - getBCHDigit(0x537)));
+        return ((data << 10) | d) ^ 0x5412;
+      }
+      function getBCHDigit(data) {
+        let digit = 0;
+        while (data !== 0) { digit++; data >>>= 1; }
+        return digit;
+      }
+
+      function makeQR(text) {
+        let dataObj = new QR8bitByte(text);
+        let len = dataObj.getLength();
+        let typeNumber = len <= 14 ? 1 : (len <= 26 ? 2 : (len <= 42 ? 3 : 4));
+        let moduleCount = typeNumber * 4 + 17;
+        let modules = Array.from({ length: moduleCount }, () => Array(moduleCount).fill(null));
+
+        function setupPositionProbePattern(row, col) {
+          for (let r = -1; r <= 7; r++) {
+            if (row + r <= -1 || moduleCount <= row + r) continue;
+            for (let c = -1; c <= 7; c++) {
+              if (col + c <= -1 || moduleCount <= col + c) continue;
+              modules[row + r][col + c] = (0 <= r && r <= 6 && (c === 0 || c === 6)) ||
+                (0 <= c && c <= 6 && (r === 0 || r === 6)) || (2 <= r && r <= 4 && 2 <= c && c <= 4);
+            }
+          }
+        }
+        setupPositionProbePattern(0, 0);
+        setupPositionProbePattern(moduleCount - 7, 0);
+        setupPositionProbePattern(0, moduleCount - 7);
+
+        if (typeNumber >= 2) {
+          let pos = [6, moduleCount - 7];
+          for (let i = 0; i < pos.length; i++) {
+            for (let j = 0; j < pos.length; j++) {
+              let row = pos[i], col = pos[j];
+              if (modules[row][col] !== null) continue;
+              for (let r = -2; r <= 2; r++)
+                for (let c = -2; c <= 2; c++)
+                  modules[row + r][col + c] = r === -2 || r === 2 || c === -2 || c === 2 || (r === 0 && c === 0);
+            }
+          }
+        }
+
+        for (let r = 8; r < moduleCount - 8; r++) if (modules[r][6] === null) modules[r][6] = (r % 2 === 0);
+        for (let c = 8; c < moduleCount - 8; c++) if (modules[6][c] === null) modules[6][c] = (c % 2 === 0);
+
+        let bits = getBCHTypeInfo(0);
+        for (let i = 0; i < 15; i++) {
+          let mod = ((bits >> i) & 1) === 1;
+          if (i < 6) modules[i][8] = mod;
+          else if (i < 8) modules[i + 1][8] = mod;
+          else modules[moduleCount - 15 + i][8] = mod;
+          if (i < 8) modules[8][moduleCount - i - 1] = mod;
+          else if (i < 9) modules[8][15 - i - 1 + 1] = mod;
+          else modules[8][15 - i - 1] = mod;
+        }
+        modules[moduleCount - 8][8] = true;
+
+        let rsBlock = RS_BLOCK_TABLE[typeNumber - 1];
+        let count = rsBlock[0], totalCount = rsBlock[1], dataCount = rsBlock[2];
+        let buffer = new QRBitBuffer();
+        buffer.put(4, 4);
+        buffer.put(dataObj.getLength(), 8);
+        dataObj.write(buffer);
+        let totalDataCount = dataCount * count;
+        if (buffer.length + 4 <= totalDataCount * 8) buffer.put(0, 4);
+        while (buffer.length % 8 !== 0) buffer.putBit(false);
+        while (true) {
+          if (buffer.length >= totalDataCount * 8) break;
+          buffer.put(0xEC, 8);
+          if (buffer.length >= totalDataCount * 8) break;
+          buffer.put(0x11, 8);
+        }
+
+        let offset = 0;
+        let dcdata = [], ecdata = [];
+        for (let r = 0; r < count; r++) {
+          dcdata[r] = new Array(dataCount);
+          for (let i = 0; i < dataCount; i++) dcdata[r][i] = 0xff & buffer.buffer[i + offset];
+          offset += dataCount;
+          let rsPoly = getErrorCorrectPolynomial(totalCount - dataCount);
+          let rawPoly = new QRPolynomial(dcdata[r], rsPoly.getLength() - 1);
+          let modPoly = rawPoly.mod(rsPoly);
+          ecdata[r] = new Array(rsPoly.getLength() - 1);
+          for (let i = 0; i < ecdata[r].length; i++) {
+            let modIndex = i + modPoly.getLength() - ecdata[r].length;
+            ecdata[r][i] = modIndex >= 0 ? modPoly.get(modIndex) : 0;
+          }
+        }
+
+        let dataBytes = [];
+        for (let i = 0; i < dataCount; i++) for (let r = 0; r < count; r++) dataBytes.push(dcdata[r][i]);
+        for (let i = 0; i < totalCount - dataCount; i++) for (let r = 0; r < count; r++) dataBytes.push(ecdata[r][i]);
+
+        let inc = -1, row = moduleCount - 1, bitIndex = 7, byteIndex = 0;
+        for (let col = moduleCount - 1; col > 0; col -= 2) {
+          if (col === 6) col--;
+          while (true) {
+            for (let c = 0; c < 2; c++) {
+              if (modules[row][col - c] === null) {
+                let dark = false;
+                if (byteIndex < dataBytes.length) dark = (((dataBytes[byteIndex] >>> bitIndex) & 1) === 1);
+                if ((row + col - c) % 2 === 0) dark = !dark;
+                modules[row][col - c] = dark;
+                bitIndex--;
+                if (bitIndex === -1) { byteIndex++; bitIndex = 7; }
+              }
+            }
+            row += inc;
+            if (row < 0 || moduleCount <= row) { row -= inc; inc = -inc; break; }
+          }
+        }
+        return modules;
+      }
+
+      return {
+        toSVG: function(text) {
+          const m = makeQR(text);
+          const n = m.length;
+          const pad = 2;
+          const size = n + pad * 2;
+          let rects = '';
+          for (let r = 0; r < n; r++) {
+            for (let c = 0; c < n; c++) {
+              if (m[r][c]) rects += `<rect x="${c + pad}" y="${r + pad}" width="1" height="1"/>`;
+            }
+          }
+          return `<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 ${size} ${size}" shape-rendering="crispEdges"><rect width="${size}" height="${size}" fill="#fff"/><g fill="#0f172a">${rects}</g></svg>`;
+        }
+      };
+    })();
+
+    const STORAGE_KEY = 'khasmcode_db_v1';
+    let state = {
+      coupons: {},
+      batches: [],
+      clinics: ['عيادة الدكتور أحمد', 'سنتر الجمال الطبي'],
+      settings: {
+        firebaseUrl: '',
+        kioskPin: '1234',
+        kioskLocked: false
+      }
+    };
+
+    let selectedPrintCount = 16;
+    let selectedDiscountValue = '50%';
+    let lastActivatedCoupon = null;
+    let html5QrScanner = null;
+    let deferredPrompt = null;
+
+    function loadState() {
+      try {
+        const raw = localStorage.getItem(STORAGE_KEY);
+        if (raw) {
+          const parsed = JSON.parse(raw);
+          state = {
+            ...state,
+            ...parsed,
+            settings: { ...state.settings, ...(parsed.settings || {}) }
+          };
+        }
+      } catch (e) { console.error(e); }
+      updateSyncUI();
+      applyKioskUI();
+      refreshAllViews();
+      if (state.settings.firebaseUrl) syncFromCloud();
+    }
+
+    function saveState(pushCloud = true) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+      refreshAllViews();
+      if (pushCloud && state.settings.firebaseUrl) {
+        pushToCloud();
+      }
+    }
+
+    async function pushToCloud() {
+      const base = state.settings.firebaseUrl.replace(/\/$/, '');
+      if (!base) return;
+      try {
+        await fetch(`${base}/khasmcode.json`, {
+          method: 'PUT',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            coupons: state.coupons,
+            batches: state.batches,
+            clinics: state.clinics,
+            updatedAt: Date.now()
+          })
+        });
+      } catch (e) {
+        console.warn('Cloud push failed:', e);
+      }
+    }
+
+    async function syncFromCloud(showMsg = false) {
+      const base = state.settings.firebaseUrl.replace(/\/$/, '');
+      if (!base) return;
+      try {
+        const res = await fetch(`${base}/khasmcode.json`);
+        if (!res.ok) throw new Error('HTTP ' + res.status);
+        const cloudData = await res.json();
+        if (cloudData) {
+          const mergedCoupons = { ...state.coupons };
+          if (cloudData.coupons) {
+            Object.entries(cloudData.coupons).forEach(([code, cObj]) => {
+              const localObj = mergedCoupons[code];
+              if (!localObj) {
+                mergedCoupons[code] = cObj;
+              } else if (cObj.status === 'USED' || (cObj.status === 'ACTIVE' && localObj.status === 'PRINTED')) {
+                mergedCoupons[code] = cObj;
+              }
+            });
+          }
+          state.coupons = mergedCoupons;
+          if (Array.isArray(cloudData.batches) && cloudData.batches.length >= state.batches.length) {
+            state.batches = cloudData.batches;
+          }
+          if (Array.isArray(cloudData.clinics)) {
+            state.clinics = Array.from(new Set([...state.clinics, ...cloudData.clinics]));
+          }
+          localStorage.setItem(STORAGE_KEY, JSON.stringify(state));
+          refreshAllViews();
+        }
+        if (showMsg) showToast('✅ تمت المزامنة السحابية بنجاح');
+      } catch (e) {
+        if (showMsg) showToast('⚠️ تعذر الاتصال بـ Firebase، تأكد من الرابط');
+      }
+    }
+
+    setInterval(() => {
+      if (state.settings.firebaseUrl) syncFromCloud(false);
+    }, 8000);
+
+    function showToast(msg) {
+      const el = document.getElementById('toast');
+      el.textContent = msg;
+      el.classList.add('show');
+      setTimeout(() => el.classList.remove('show'), 2800);
+    }
+
+    function switchTab(tabId) {
+      if (state.settings.kioskLocked && tabId !== 'tab-verify') {
+        showToast('🔒 التطبيق مقفل على واجهة العيادة فقط');
+        return;
+      }
+      stopScanner();
+      document.querySelectorAll('.tab-panel').forEach(p => p.classList.remove('active'));
+      document.querySelectorAll('.nav-item').forEach(n => n.classList.remove('active'));
+      document.getElementById(tabId).classList.add('active');
+      const btn = document.querySelector(`.nav-item[data-tab="${tabId}"]`);
+      if (btn) btn.classList.add('active');
+    }
+
+    function toggleKioskMode() {
+      if (!state.settings.kioskLocked) {
+        state.settings.kioskLocked = true;
+        saveState(false);
+        applyKioskUI();
+        switchTab('tab-verify');
+        showToast('🔒 تم تفعيل وضع قفل العيادة');
+      } else {
+        const pin = prompt('أدخل الرمز السري لفتح وضع الإدارة (الافتراضي 1234):');
+        if (pin === (state.settings.kioskPin || '1234')) {
+          state.settings.kioskLocked = false;
+          saveState(false);
+          applyKioskUI();
+          showToast('🔓 تم فتح وضع الإدارة');
+        } else if (pin !== null) {
+          showToast('❌ الرمز السري غير صحيح');
+        }
+      }
+    }
+
+    function applyKioskUI() {
+      const btn = document.getElementById('kioskBtn');
+      const icon = document.getElementById('kioskIcon');
+      const text = document.getElementById('kioskText');
+      const nav = document.getElementById('bottomNav');
+      if (state.settings.kioskLocked) {
+        btn.classList.add('active-lock');
+        icon.textContent = '🔒';
+        text.textContent = 'وضع العيادة';
+        nav.style.display = 'none';
+        switchTab('tab-verify');
+      } else {
+        btn.classList.remove('active-lock');
+        icon.textContent = '🔓';
+        text.textContent = 'وضع الإدارة';
+        nav.style.display = 'flex';
+      }
+    }
+
+    function selectCount(num, el) {
+      selectedPrintCount = num;
+      document.getElementById('customCount').value = num;
+      document.querySelectorAll('#countChips .chip').forEach(c => c.classList.remove('selected'));
+      if (el) el.classList.add('selected');
+    }
+
+    function updateCustomCount() {
+      const v = parseInt(document.getElementById('customCount').value, 10);
+      if (v >= 1 && v <= 80) {
+        selectedPrintCount = v;
+        document.querySelectorAll('#countChips .chip').forEach(c => c.classList.remove('selected'));
+      }
+    }
+
+    function generateUniqueCode(prefix) {
+      const chars = 'ABCDEFGHJKLMNPQRSTUVWXYZ23456789';
+      let code = '';
+      do {
+        let part1 = '';
+        let part2 = '';
+        for (let i = 0; i < 4; i++) part1 += chars[Math.floor(Math.random() * chars.length)];
+        for (let i = 0; i < 3; i++) part2 += chars[Math.floor(Math.random() * chars.length)];
+        code = `${prefix}-${part1}-${part2}`;
+      } while (state.coupons[code]);
+      return code;
+    }
+
+    function generateNewBatch() {
+      const count = Math.min(80, Math.max(1, parseInt(document.getElementById('customCount').value, 10) || 16));
+      const prefix = (document.getElementById('batchPrefix').value || 'KC').trim().toUpperCase().replace(/[^A-Z0-9]/g, '') || 'KC';
+      const batchId = 'B-' + Date.now().toString().slice(-6);
+      const now = new Date().toLocaleString('ar-IQ');
+      const codes = [];
+
+      for (let i = 0; i < count; i++) {
+        const code = generateUniqueCode(prefix);
+        codes.push(code);
+        state.coupons[code] = {
+          code,
+          batchId,
+          status: 'PRINTED',
+          customer: '',
+          phone: '',
+          clinic: '',
+          discount: '',
+          notes: '',
+          createdAt: now,
+          activatedAt: '',
+          usedAt: ''
+        };
+      }
+
+      const batchObj = { id: batchId, createdAt: now, count, codes };
+      state.batches.unshift(batchObj);
+      if (state.batches.length > 25) state.batches = state.batches.slice(0, 25);
+
+      saveState();
+      renderA4Sheet(batchObj);
+      showToast(`✨ تم توليد ${count} باركود على ورقة A4`);
+    }
+
+    function renderA4Sheet(batchObj) {
+      const sheetCard = document.getElementById('sheetCard');
+      const sheet = document.getElementById('a4Sheet');
+      sheetCard.style.display = 'block';
+      document.getElementById('sheetTitle').textContent = `ورقة قسائم رقم #${batchObj.id}`;
+      document.getElementById('sheetMeta').textContent = `${batchObj.count} قسيمة • تاريخ الإنشاء: ${batchObj.createdAt}`;
+
+      const cols = batchObj.count >= 25 ? 5 : 4;
+      sheet.style.gridTemplateColumns = `repeat(${cols}, 1fr)`;
+
+      sheet.innerHTML = batchObj.codes.map(code => `
+        <div class="qr-ticket">
+          <div class="qr-brand-tag">قسيمة خصم خاصة</div>
+          ${QR.toSVG(code)}
+          <div class="qr-code-text">${code}</div>
+          <div class="qr-hint">صالح للاستخدام مرة واحدة</div>
+        </div>
+      `).join('');
+    }
+
+    function renderBatchesList() {
+      const card = document.getElementById('batchesCard');
+      const list = document.getElementById('batchesList');
+      if (!state.batches.length) {
+        card.style.display = 'none';
+        return;
+      }
+      card.style.display = 'block';
+      list.innerHTML = state.batches.map((b, idx) => `
+        <div class="coupon-row">
+          <div>
+            <div style="font-weight:700; font-size:14px;">ورقة #${b.id} (${b.count} باركود)</div>
+            <div style="font-size:12px; color:var(--text-muted);">${b.createdAt}</div>
+          </div>
+          <button type="button" class="btn btn-outline btn-sm" onclick="reprintBatch(${idx})">عرض / طباعة</button>
+        </div>
+      `).join('');
+    }
+
+    function reprintBatch(idx) {
+      const b = state.batches[idx];
+      if (!b) return;
+      renderA4Sheet(b);
+      document.getElementById('sheetCard').scrollIntoView({ behavior: 'smooth' });
+    }
+
+    function selectDiscount(val, el) {
+      selectedDiscountValue = val;
+      document.getElementById('actDiscount').value = val;
+      document.querySelectorAll('#discountChips .chip').forEach(c => c.classList.remove('selected'));
+      if (el) el.classList.add('selected');
+    }
+
+    function pickUnassignedCode(val) {
+      if (val) document.getElementById('actCode').value = val;
+    }
+
+    function renderClinicsChips() {
+      const box = document.getElementById('savedClinicsChips');
+      box.innerHTML = state.clinics.map(c => `
+        <button type="button" class="chip" onclick="document.getElementById('actClinic').value='${c.replace(/'/g, "\\'")}'">${c}</button>
+      `).join('');
+    }
+
+    function renderUnassignedDropdown() {
+      const sel = document.getElementById('unassignedSelect');
+      const printed = Object.values(state.coupons).filter(c => c.status === 'PRINTED');
+      sel.innerHTML = `<option value="">-- اختر كود مطبوع (${printed.length}) --</option>` +
+        printed.slice(0, 100).map(c => `<option value="${c.code}">${c.code}</option>`).join('');
+    }
+
+    function activateCoupon() {
+      const code = document.getElementById('actCode').value.trim().toUpperCase();
+      const customer = document.getElementById('actCustomer').value.trim();
+      const phone = document.getElementById('actPhone').value.trim();
+      const clinic = document.getElementById('actClinic').value.trim();
+      const discount = document.getElementById('actDiscount').value.trim();
+      const notes = document.getElementById('actNotes').value.trim();
+
+      if (!code) return showToast('⚠️ يرجى إدخال أو مسح رمز الباركود');
+      if (!customer) return showToast('⚠️ يرجى إدخال اسم العميل');
+      if (!clinic) return showToast('⚠️ يرجى إدخال اسم العيادة أو السنتر');
+      if (!discount) return showToast('⚠️ يرجى تحديد نسبة أو قيمة الخصم');
+
+      const existing = state.coupons[code];
+      if (existing && existing.status === 'USED') {
+        return showToast('❌ هذا الباركود مستخدم مسبقاً ولا يمكن إعادة تفعيله!');
+      }
+
+      const now = new Date().toLocaleString('ar-IQ');
+      state.coupons[code] = {
+        code,
+        batchId: existing ? existing.batchId : 'MANUAL',
+        status: 'ACTIVE',
+        customer,
+        phone,
+        clinic,
+        discount,
+        notes,
+        createdAt: existing ? existing.createdAt : now,
+        activatedAt: now,
+        usedAt: ''
+      };
+
+      if (!state.clinics.includes(clinic)) {
+        state.clinics.unshift(clinic);
+        if (state.clinics.length > 8) state.clinics.pop();
+      }
+
+      lastActivatedCoupon = state.coupons[code];
+      saveState();
+
+      document.getElementById('activationSuccessBox').style.display = 'block';
+      document.getElementById('activationSummary').innerHTML = `
+        العميل: <strong>${customer}</strong> • الخصم: <strong>${discount}</strong><br>
+        الجهة: <strong>${clinic}</strong> • الكود: <strong style="font-family:monospace;">${code}</strong>
+      `;
+
+      document.getElementById('actCode').value = '';
+      document.getElementById('actCustomer').value = '';
+      document.getElementById('actPhone').value = '';
+      document.getElementById('actNotes').value = '';
+      showToast('✅ تم تفعيل الخصم للعميل بنجاح');
+    }
+
+    function shareViaWhatsApp() {
+      if (!lastActivatedCoupon) return;
+      const c = lastActivatedCoupon;
+      const msg = `مرحباً *${c.customer}* 🎟️\nتم تفعيل قسيمة الخصم الخاصة بك بنجاح:\n\n🏥 *الجهة:* ${c.clinic}\n🎁 *قيمة الخصم:* ${c.discount}\n🔑 *رمز القسيمة:* ${c.code}\n${c.notes ? `📝 *ملاحظة:* ${c.notes}\n` : ''}\n⚠️ *ملاحظة:* هذه القسيمة صالحة للاستخدام مرة واحدة فقط عند إبراز الباركود.`;
+      let cleanPhone = (c.phone || '').replace(/[^0-9]/g, '');
+      if (cleanPhone.startsWith('07')) cleanPhone = '964' + cleanPhone.slice(1);
+      const url = cleanPhone
+        ? `https://wa.me/${cleanPhone}?text=${encodeURIComponent(msg)}`
+        : `https://wa.me/?text=${encodeURIComponent(msg)}`;
+      window.open(url, '_blank');
+    }
+
+    function copyActivatedCode() {
+      if (!lastActivatedCoupon) return;
+      navigator.clipboard.writeText(lastActivatedCoupon.code);
+      showToast('📋 تم نسخ رمز القسيمة');
+    }
+
+    async function checkCouponCode(rawCode) {
+      const inputEl = document.getElementById('verifyInput');
+      const code = (rawCode || inputEl.value).trim().toUpperCase();
+      if (!code) return showToast('⚠️ أدخل رمز الباركود أولاً');
+      inputEl.value = code;
+
+      if (state.settings.firebaseUrl) {
+        await syncFromCloud(false);
+      }
+
+      const item = state.coupons[code];
+      const resultBox = document.getElementById('verifyResult');
+
+      if (!item) {
+        resultBox.innerHTML = `
+          <div class="verify-box used">
+            <div style="font-size:18px; font-weight:800; color:var(--danger); margin-bottom:4px;">❌ كود غير مسجل في النظام</div>
+            <div style="font-size:13px;">الرمز <strong>${code}</strong> غير موجود في قاعدة البيانات. تأكد من صحة الباركود.</div>
+          </div>
+        `;
+        return;
+      }
+
+      if (item.status === 'PRINTED') {
+        resultBox.innerHTML = `
+          <div class="verify-box printed">
+            <div style="font-size:18px; font-weight:800; color:var(--warning); margin-bottom:4px;">⚠️ باركود مطبوع غير مفعّل</div>
+            <div style="font-size:13px;">هذا الباركود (<strong>${code}</strong>) مطبوع من الورقة ولم يتم إسناده لأي عميل بعد.</div>
+          </div>
+        `;
+        return;
+      }
+
+      if (item.status === 'USED') {
+        resultBox.innerHTML = `
+          <div class="verify-box used">
+            <div style="font-size:20px; font-weight:800; color:var(--danger); margin-bottom:6px;">🚫 تم استخدام هذا الباركود مسبقاً!</div>
+            <div style="font-size:14px; margin-bottom:8px;">عذراً، هذا الخصم صالح للاستخدام مرة واحدة فقط وقد تم استهلاكه بالكامل.</div>
+            <div style="background:#fff; padding:12px; border-radius:12px; font-size:13px; border:1px solid #fecaca;">
+              <div>👤 <strong>العميل:</strong> ${item.customer}</div>
+              <div>🏥 <strong>الجهة:</strong> ${item.clinic}</div>
+              <div>🎁 <strong>الخصم:</strong> ${item.discount}</div>
+              <div style="color:var(--danger); margin-top:4px;">🕒 <strong>تاريخ الاستخدام السابق:</strong> ${item.usedAt}</div>
+            </div>
+          </div>
+        `;
+        return;
+      }
+
+      resultBox.innerHTML = `
+        <div class="verify-box valid">
+          <div style="text-align:center;">
+            <span class="badge badge-active" style="font-size:13px; padding:6px 14px;">✅ قسيمة خصم صالحة للاستخدام</span>
+            <div class="discount-hero">${item.discount}</div>
+          </div>
+          <div style="background:#fff; padding:14px; border-radius:12px; font-size:14px; margin-bottom:14px; border:1px solid #a7f3d0;">
+            <div style="margin-bottom:6px;">👤 <strong>اسم العميل:</strong> ${item.customer}</div>
+            <div style="margin-bottom:6px;">🏥 <strong>العيادة / السنتر:</strong> ${item.clinic}</div>
+            <div style="margin-bottom:6px;">🔑 <strong>رمز الكود:</strong> <span style="font-family:monospace;">${item.code}</span></div>
+            ${item.notes ? `<div style="margin-bottom:6px;">📝 <strong>ملاحظات:</strong> ${item.notes}</div>` : ''}
+            <div style="font-size:12px; color:var(--text-muted);">📅 تاريخ التفعيل: ${item.activatedAt}</div>
+          </div>
+          <button type="button" class="btn btn-success" onclick="redeemCouponNow('${item.code}')">
+            ✔️ تأكيد استخدام الخصم الآن (اعتماد لمرة واحدة)
+          </button>
+        </div>
+      `;
+    }
+
+    function redeemCouponNow(code) {
+      const item = state.coupons[code];
+      if (!item || item.status !== 'ACTIVE') return;
+      const now = new Date().toLocaleString('ar-IQ');
+      item.status = 'USED';
+      item.usedAt = now;
+      saveState();
+      showToast('🎉 تم اعتماد الخصم وإغلاق الباركود نهائياً');
+      checkCouponCode(code);
+    }
+
+    async function toggleScanner(mode) {
+      await stopScanner();
+      const wrap = document.getElementById(`scanner-${mode}`);
+      wrap.classList.add('open');
+
+      if (typeof Html5Qrcode === 'undefined') {
+        showToast('⚠️ مكتبة الكاميرا قيد التحميل، يمكنك إدخال الكود يدوياً');
+        return;
+      }
+
+      try {
+        html5QrScanner = new Html5Qrcode(`reader-${mode}`);
+        await html5QrScanner.start(
+          { facingMode: 'environment' },
+          { fps: 10, qrbox: { width: 220, height: 220 } },
+          (decodedText) => {
+            const cleanCode = decodedText.trim().toUpperCase();
+            stopScanner();
+            if (navigator.vibrate) navigator.vibrate(120);
+            if (mode === 'activate') {
+              document.getElementById('actCode').value = cleanCode;
+              showToast(`📷 تم التقاط الكود: ${cleanCode}`);
+            } else {
+              checkCouponCode(cleanCode);
+            }
+          },
+          () => {}
+        );
+      } catch (err) {
+        wrap.classList.remove('open');
+        showToast('⚠️ تعذر فتح الكاميرا، تأكد من منح إذن الكاميرا للمتصفح');
+      }
+    }
+
+    async function stopScanner() {
+      document.querySelectorAll('.scanner-wrapper').forEach(w => w.classList.remove('open'));
+      if (html5QrScanner) {
+        try {
+          await html5QrScanner.stop();
+          html5QrScanner.clear();
+        } catch (e) {}
+        html5QrScanner = null;
+      }
+    }
+
+    function renderHistory() {
+      const query = (document.getElementById('searchInput').value || '').trim().toLowerCase();
+      const statusFilter = document.getElementById('filterStatus').value;
+      const list = document.getElementById('historyList');
+
+      const items = Object.values(state.coupons).reverse().filter(item => {
+        if (statusFilter !== 'ALL' && item.status !== statusFilter) return false;
+        if (!query) return true;
+        return (
+          item.code.toLowerCase().includes(query) ||
+          (item.customer || '').toLowerCase().includes(query) ||
+          (item.clinic || '').toLowerCase().includes(query)
+        );
+      });
+
+      if (!items.length) {
+        list.innerHTML = `<div style="text-align:center; padding:24px; color:var(--text-muted); font-size:13px;">لا توجد سجلات مطابقة حالياً.</div>`;
+        return;
+      }
+
+      list.innerHTML = items.slice(0, 120).map(item => {
+        const badgeClass = item.status === 'USED' ? 'badge-used' : (item.status === 'ACTIVE' ? 'badge-active' : 'badge-printed');
+        const badgeText = item.status === 'USED' ? 'مستخدم' : (item.status === 'ACTIVE' ? 'مفعّل' : 'مطبوع فقط');
+        return `
+          <div class="coupon-row">
+            <div style="flex:1; min-width:0;">
+              <div style="display:flex; align-items:center; gap:6px; flex-wrap:wrap;">
+                <strong style="font-family:monospace; font-size:13px;">${item.code}</strong>
+                <span class="badge ${badgeClass}">${badgeText}</span>
+                ${item.discount ? `<span class="badge" style="background:var(--primary-light); color:var(--primary);">${item.discount}</span>` : ''}
+              </div>
+              <div style="font-size:13px; font-weight:700; margin-top:4px;">
+                ${item.customer || '<span style="color:var(--text-muted); font-weight:400;">لم يُسند لعميل بعد</span>'}
+                ${item.clinic ? ` • <span style="color:var(--primary);">${item.clinic}</span>` : ''}
+              </div>
+              <div style="font-size:11px; color:var(--text-muted); margin-top:2px;">
+                ${item.status === 'USED' ? `تم الاستخدام: ${item.usedAt}` : (item.activatedAt ? `تاريخ التفعيل: ${item.activatedAt}` : `تاريخ الطباعة: ${item.createdAt}`)}
+              </div>
+            </div>
+            ${item.status === 'PRINTED' ? `<button type="button" class="btn btn-outline btn-sm" onclick="quickActivate('${item.code}')">تفعيل</button>` : ''}
+          </div>
+        `;
+      }).join('');
+    }
+
+    function quickActivate(code) {
+      document.getElementById('actCode').value = code;
+      switchTab('tab-activate');
+    }
+
+    function exportCSV() {
+      const rows = [['الرمز', 'الحالة', 'اسم العميل', 'الهاتف', 'العيادة أو السنتر', 'الخصم', 'تاريخ التفعيل', 'تاريخ الاستخدام']];
+      Object.values(state.coupons).forEach(c => {
+        const st = c.status === 'USED' ? 'مستخدم' : (c.status === 'ACTIVE' ? 'مفعّل' : 'مطبوع فقط');
+        rows.push([c.code, st, c.customer || '', c.phone || '', c.clinic || '', c.discount || '', c.activatedAt || '', c.usedAt || '']);
+      });
+      const csvContent = '\uFEFF' + rows.map(r => r.map(v => `"${String(v).replace(/"/g, '""')}"`).join(',')).join('\n');
+      const blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `khasmcode-report-${new Date().toISOString().slice(0,10)}.csv`;
+      a.click();
+      URL.revokeObjectURL(url);
+      showToast('📥 تم تصدير التقرير بنجاح');
+    }
+
+    function openSyncModal() {
+      document.getElementById('firebaseUrlInput').value = state.settings.firebaseUrl || '';
+      document.getElementById('kioskPinInput').value = state.settings.kioskPin || '1234';
+      document.getElementById('syncModal').classList.add('open');
+    }
+
+    function closeSyncModal() {
+      document.getElementById('syncModal').classList.remove('open');
+    }
+
+    async function saveSyncSettings() {
+      state.settings.firebaseUrl = document.getElementById('firebaseUrlInput').value.trim();
+      state.settings.kioskPin = document.getElementById('kioskPinInput').value.trim() || '1234';
+      saveState(false);
+      updateSyncUI();
+      if (state.settings.firebaseUrl) {
+        await pushToCloud();
+        await syncFromCloud(true);
+      } else {
+        showToast('💾 تم حفظ الإعدادات المحلية');
+      }
+      closeSyncModal();
+    }
+
+    function manualSyncNow() {
+      if (!state.settings.firebaseUrl) return showToast('⚠️ أدخل رابط Firebase أولاً');
+      pushToCloud().then(() => syncFromCloud(true));
+    }
+
+    function updateSyncUI() {
+      const dot = document.getElementById('syncDot');
+      const lbl = document.getElementById('syncLabel');
+      if (state.settings.firebaseUrl) {
+        dot.classList.add('online');
+        lbl.textContent = 'متصل سحابياً';
+      } else {
+        dot.classList.remove('online');
+        lbl.textContent = 'محلي';
+      }
+    }
+
+    function exportBackupJSON() {
+      const blob = new Blob([JSON.stringify(state, null, 2)], { type: 'application/json' });
+      const url = URL.createObjectURL(blob);
+      const a = document.createElement('a');
+      a.href = url;
+      a.download = `khasmcode-backup-${new Date().toISOString().slice(0,10)}.json`;
+      a.click();
+      URL.revokeObjectURL(url);
+    }
+
+    function refreshAllViews() {
+      const all = Object.values(state.coupons);
+      document.getElementById('statPrinted').textContent = all.filter(c => c.status === 'PRINTED').length;
+      document.getElementById('statActive').textContent = all.filter(c => c.status === 'ACTIVE').length;
+      document.getElementById('statUsed').textContent = all.filter(c => c.status === 'USED').length;
+
+      renderBatchesList();
+      renderClinicsChips();
+      renderUnassignedDropdown();
+      renderHistory();
+    }
+
+    if ('serviceWorker' in navigator) {
+      window.addEventListener('load', () => {
+        navigator.serviceWorker.register('./sw.js').catch(() => {});
+      });
+    }
+
+    window.addEventListener('beforeinstallprompt', (e) => {
+      e.preventDefault();
+      deferredPrompt = e;
+      document.getElementById('installBtn').style.display = 'inline-flex';
+    });
+
+    async function installPWA() {
+      if (!deferredPrompt) return;
+      deferredPrompt.prompt();
+      await deferredPrompt.userChoice;
+      deferredPrompt = null;
+      document.getElementById('installBtn').style.display = 'none';
+    }
+
+    loadState();
+  </script>
+</body>
+</html>
